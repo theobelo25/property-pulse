@@ -28,8 +28,6 @@ export function GlobalProvider({ children }: { children: ReactNode }) {
 
   const { data: session } = useSession();
 
-  console.log(session);
-
   useEffect(() => {
     if (session && session.user) {
       getUnreadMessageCount().then((res) => {

@@ -22,11 +22,12 @@ export const authOptions = {
       await connectDB();
 
       const userExists = await User.findOne({ email: profile.email });
+      console.log("ue", userExists);
 
       if (!userExists) {
         // Truncate user name if too long
         const username = profile.name?.slice(0, 20);
-
+        console.log("new", username);
         await User.create({
           email: profile.email,
           username,
