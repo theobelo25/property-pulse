@@ -1,60 +1,72 @@
-import { Schema, model, models } from 'mongoose';
+import { InferSchemaType, Schema, model, models } from "mongoose";
+import { UserType } from "./User";
 
-const PropertySchema = new Schema({
+const PropertySchema = new Schema(
+  {
     owner: {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
     name: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     type: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     description: {
-        type: String,
+      type: String,
     },
     location: {
-        street: String,
-        city: String,
-        state: String,
-        zipcode: String
+      street: String,
+      city: String,
+      state: String,
+      zipcode: String,
     },
     beds: {
-        type: Number,
-        required: true
+      type: Number,
+      required: true,
     },
     baths: {
-        type: Number,
-        required: true
+      type: Number,
+      required: true,
     },
     square_feet: {
-        type: Number,
-        required: true
+      type: Number,
+      required: true,
     },
     amenities: [{ type: String }],
     rates: {
-        nightly: Number,
-        weekly: Number,
-        monthly: Number
+      nightly: Number,
+      weekly: Number,
+      monthly: Number,
     },
     seller_info: {
-        name: String,
-        email: String,
-        phone: String
+      name: String,
+      email: String,
+      phone: String,
     },
     images: [{ type: String }],
     isFeatured: {
-        type: Boolean,
-        default: false
-    }
-}, {
-    timestamps: true
-})
+      type: Boolean,
+      default: false,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
 
-const Property = models.Property || model('Property', PropertySchema);
+const Property = models.Property || model("Property", PropertySchema);
+
+export type PropertyType = Omit<
+  InferSchemaType<typeof PropertySchema>,
+  "owner"
+> & {
+  _id: string;
+  owner: UserType;
+};
 
 export default Property;

@@ -1,29 +1,29 @@
-'use server';
+"use server";
 import connectDB from "@/config/database";
 import Message from "@/models/Message";
 import { getSessionUser } from "@/utils/getSessionUser";
 import { revalidatePath } from "next/cache";
 
-async function deleteMessage(messageId) {
-    await connectDB();
-    const sessionUser = await getSessionUser();
+async function deleteMessage(messageId: string) {
+  await connectDB();
+  const sessionUser = await getSessionUser();
 
-    console.log(sessionUser);
+  console.log(sessionUser);
 
-    if (!sessionUser || !sessionUser.userId) 
-        throw new Error('User ID is required');
+  if (!sessionUser || !sessionUser.userId)
+    throw new Error("User ID is required");
 
-    const { userId } = sessionUser;
+  const { userId } = sessionUser;
 
-    const message = await Message.findById(messageId);
+  const message = await Message.findById(messageId);
 
-    if (!message) throw new Error('Message Not Found');
+  if (!message) throw new Error("Message Not Found");
 
-    if (message.recipient.toString() !== userId) throw new Error('Unauthorized');
+  if (message.recipient.toString() !== userId) throw new Error("Unauthorized");
 
-    await message.deleteOne();
+  await message.deleteOne();
 
-    revalidatePath('/messages', 'page');
+  revalidatePath("/messages", "page");
 }
 
 export default deleteMessage;

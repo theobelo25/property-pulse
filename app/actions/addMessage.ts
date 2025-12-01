@@ -1,38 +1,44 @@
-'use server';
+"use server";
 import connectDB from "@/config/database";
 import Message from "@/models/Message";
 import { getSessionUser } from "@/utils/getSessionUser";
 
-async function addMessage(previousState, formData) {
-    await connectDB();
+async function addMessage(
+  previousState: {
+    submitted?: boolean;
+    error?: string;
+  },
+  formData: FormData
+) {
+  await connectDB();
 
-    const sessionUser = await getSessionUser();
+  const sessionUser = await getSessionUser();
 
-    if (!sessionUser || !sessionUser.userId) {
-        throw new Error('User ID is required')
-    };
+  if (!sessionUser || !sessionUser.userId) {
+    throw new Error("User ID is required");
+  }
 
-    const { userId } = sessionUser;
+  const { userId } = sessionUser;
 
-    const recipient = formData.get('recipient'); 
+  const recipient = formData.get("recipient");
 
-    if (userId === recipient) {
-        return {error: 'You can not send a message to yourself'}
-    }
+  if (userId === recipient) {
+    return { error: "You can not send a message to yourself" };
+  }
 
-    const newMessage = new Message({
-        sender: userId,
-        recipient,
-        property: formData.get('property'),
-        name: formData.get('name'),
-        email: formData.get('email'),
-        phone: formData.get('phone'),
-        body: formData.get('body'),
-    });
+  const newMessage = new Message({
+    sender: userId,
+    recipient,
+    property: formData.get("property"),
+    name: formData.get("name"),
+    email: formData.get("email"),
+    phone: formData.get("phone"),
+    body: formData.get("body"),
+  });
 
-    await newMessage.save();
+  await newMessage.save();
 
-    return { submitted: true }
-};
+  return { submitted: true };
+}
 
 export default addMessage;
