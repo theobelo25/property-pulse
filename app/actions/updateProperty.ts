@@ -19,7 +19,7 @@ async function updateProperty(propertyId: string, formData: FormData) {
   const existingProperty = await Property.findById(propertyId);
 
   // Verify ownership
-  if (existingProperty.owner.toString() !== userId)
+  if (existingProperty.owner !== userId)
     throw new Error("Current user does not own this property");
 
   const amenities = formData.getAll("amenities");

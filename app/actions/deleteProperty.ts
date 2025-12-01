@@ -18,7 +18,7 @@ async function deleteProperty(propertyId: string) {
 
   if (!property) throw new Error("Property Not Found");
 
-  if (property.owner.toString() !== userId) throw new Error("Unauthorized");
+  if (property.owner !== userId) throw new Error("Unauthorized");
 
   // Extract public ID from image url
   const publicIds = property.images.map((imageUrl: string) => {

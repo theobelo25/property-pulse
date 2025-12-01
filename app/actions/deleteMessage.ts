@@ -19,7 +19,7 @@ async function deleteMessage(messageId: string) {
 
   if (!message) throw new Error("Message Not Found");
 
-  if (message.recipient.toString() !== userId) throw new Error("Unauthorized");
+  if (message.recipient !== userId) throw new Error("Unauthorized");
 
   await message.deleteOne();
 

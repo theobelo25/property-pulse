@@ -39,7 +39,7 @@ export const authOptions = {
     async session({ session }: { session: Session }): Promise<Session> {
       const user = await User.findOne({ email: session.user?.email });
 
-      if (session.user) (session.user as UserType).id = user._id.toString;
+      if (session.user) (session.user as UserType).id = user._id;
 
       return session;
     },
