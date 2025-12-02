@@ -1,6 +1,6 @@
 import GoogleProvider from "next-auth/providers/google";
 import connectDB from "@/config/database";
-import User, { UserType } from "@/models/User";
+import User from "@/models/User";
 import { Profile, Session } from "next-auth";
 
 export const authOptions = {
@@ -39,9 +39,13 @@ export const authOptions = {
     },
     async session({ session }: { session: Session }): Promise<Session> {
       const user = await User.findOne({ email: session.user?.email });
+      console.log("session", user);
 
-      if (session.user) (session.user as UserType).id = user._id;
-
+      if (session.user) {
+        const newObject = { ...session.user, id: user._id };
+        session.user = newObject;
+      }
+      console.log("session update", session.user);
       return session;
     },
   },
